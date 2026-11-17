@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Pay - History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: #f0f4f9;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 420px;
+      background-color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+      position: relative;
+      padding-bottom: 72px;
+    }
+
+    /* Top GPay Style Header */
+    .top-header {
+      background-color: #ffffff;
+      padding: 16px 20px 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f3f4;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #202124;
+      letter-spacing: 0.1px;
+    }
+
+    .header-icons {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      color: #5f6368;
+    }
+
+    .main-content {
+      padding: 16px 16px;
+      flex: 1;
+    }
+
+    .hidden-view {
+      display: none !important;
+    }
+
+    /* Home Admin Card */
+    .home-card {
+      background: #f8f9fa;
+      border: 1px solid #dadce0;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .home-card h3 {
+      font-size: 15px;
+      color: #202124;
+      font-weight: 500;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #5f6368;
+    }
+
+    .home-card input, .home-card select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 13.5px;
+      outline: none;
+      background: #fff;
+      color: #202124;
+    }
+
+    .home-card input:focus {
+      border-color: #1a73e8;
+    }
+
+    .row-2 {
+      display: flex;
+      gap: 10px;
+    }
+
+    .add-btn {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .status-msg {
+      font-size: 12px;
+      font-weight: 500;
+      color: #137333;
+      text-align: center;
+      min-height: 16px;
+    }
+
+    .manage-section {
+      margin-top: 18px;
+    }
+
+    .manage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .manage-header span {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #5f6368;
+    }
+
+    .clear-all-btn {
+      background: #fce8e6;
+      color: #c5221f;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .mini-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8f9fa;
+      border: 1px solid #dadce0;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .del-btn {
+      background: none;
+      border: none;
+      color: #c5221f;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    /* History List Section (GPay Style Spacing & Typography) */
+    .section-title {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #5f6368;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.8px;
+    }
+
+    .tx-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f3f4;
+      cursor: pointer;
+    }
+
+    .tx-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      max-width: 68%;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tx-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .tx-title {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: #202124;
+      line-height: 1.35;
+    }
+
+    .tx-time {
+      font-size: 12px;
+      color: #5f6368;
+      font-weight: 400;
+    }
+
+    .tx-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .tx-amount {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: #202124;
+    }
+
+    .tx-status {
+      font-size: 11px;
+      color: #5f6368;
+      font-weight: 400;
+    }
+
+    /* Fullscreen Receipt Modal */
+    .receipt-modal {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      background-color: #ffffff;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .receipt-modal.hidden {
+      display: none;
+    }
+
+    .receipt-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .receipt-close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #202124;
+      cursor: pointer;
+    }
+
+    .receipt-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    .receipt-avatar-lg {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .receipt-name {
+      font-size: 20px;
+      font-weight: 500;
+      color: #202124;
+      margin-bottom: 4px;
+    }
+
+    .receipt-upi {
+      font-size: 13px;
+      color: #5f6368;
+      margin-bottom: 24px;
+    }
+
+    .receipt-amount-large {
+      font-size: 36px;
+      font-weight: 400;
+      color: #202124;
+      margin-bottom: 6px;
+    }
+
+    .receipt-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e6f4ea;
+      color: #137333;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .receipt-info-card {
+      width: 100%;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .info-label {
+      color: #5f6368;
+    }
+
+    .info-value {
+      color: #202124;
+      font-weight: 500;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-all;
+    }
+
+    .receipt-actions {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .action-btn-main {
+      flex: 1;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .action-btn-sec {
+      flex: 1;
+      background: #ffffff;
+      color: #1a73e8;
+      border: 1px solid #dadce0;
+      padding: 12px;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Bottom Navigation Bar (Clean SVG Icons) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-top: 1px solid #f1f3f4;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+      z-index: 20;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 11.5px;
+      color: #5f6368;
+      font-weight: 500;
+      cursor: pointer;
+      width: 50%;
+    }
+
+    .nav-item.active {
+      color: #1a73e8;
+      font-weight: 700;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="header-title" id="headerTitle">Made by Ibrahim</div>
+      <div class="header-icons" id="headerIcons">
+        <!-- Search SVG -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <!-- Three Dots SVG -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+      </div>
+    </div>
+
+    <!-- HOME VIEW -->
+    <div id="homeView" class="main-content">
+      <div class="home-card">
+        <h3>Add Payment Entry</h3>
+
+        <div class="input-group">
+          <label>Person Name</label>
+          <input type="text" id="senderName" placeholder="e.g. md Yusuf" />
+        </div>
+
+        <div class="input-group">
+          <label>UPI ID</label>
+          <input type="text" id="upiIdInput" placeholder="yusuf@okaxis" value="yusuf@okaxis" />
+        </div>
+
+        <div class="row-2">
+          <div class="input-group" style="flex: 1;">
+            <label>Amount (₹)</label>
+            <input type="number" id="txAmount" placeholder="2000" />
+          </div>
+          <div class="input-group" style="flex: 1;">
+            <label>Type</label>
+            <select id="txType">
+              <option value="received">Received</option>
+              <option value="sent">Paid</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Date & Time</label>
+          <input type="text" id="txDateTime" placeholder="17 Nov, 2026 • 09:38 PM" value="17 Nov, 2026 • 09:38 PM" />
+        </div>
+
+        <button class="add-btn" onclick="addTransaction()">+ Add Entry</button>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+
+      <div class="manage-section">
+        <div class="manage-header">
+          <span>Added Entries (<span id="entryCount">0</span>)</span>
+          <button class="clear-all-btn" onclick="clearAll()">Clear All</button>
+        </div>
+        <div id="miniList"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY VIEW -->
+    <div id="historyView" class="main-content hidden-view">
+      <div class="section-title">Recent transactions</div>
+      <div id="txList"></div>
+    </div>
+
+    <!-- FULLSCREEN RECEIPT MODAL -->
+    <div id="receiptModal" class="receipt-modal hidden">
+      <div class="receipt-top-bar">
+        <button class="receipt-close-btn" onclick="closeReceipt()">✕</button>
+        <div style="font-size: 15px; font-weight: 500; color: #202124;">Transaction details</div>
+        <div style="width: 24px;"></div>
+      </div>
+
+      <div class="receipt-body">
+        <div class="receipt-avatar-lg" id="modalAvatar">M</div>
+        <div class="receipt-name" id="modalName">md Yusuf</div>
+        <div class="receipt-upi" id="modalUpi">UPI ID: yusuf@okaxis</div>
+
+        <div class="receipt-amount-large" id="modalAmount">₹2,000</div>
+        <div class="receipt-status-badge">
+          <span>✓</span> <span id="modalStatusText">Payment received</span>
+        </div>
+
+        <div class="receipt-info-card">
+          <div class="info-row">
+            <span class="info-label">Google Pay UPI ref. ID</span>
+            <span class="info-value" id="modalRefId">631916176518</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">To: Bank account</span>
+            <span class="info-value">State Bank of India XXXX1234</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">From: Sender</span>
+            <span class="info-value" id="modalSenderDetail">md Yusuf</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Time</span>
+            <span class="info-value" id="modalTimeDetail">17 Nov, 2026 • 09:38 PM</span>
+          </div>
+        </div>
+
+        <div class="receipt-actions">
+          <button class="action-btn-main">Again</button>
+          <button class="action-btn-sec">Share receipt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar (Professional SVG Icons) -->
+    <div class="bottom-nav">
+      <div class="nav-item active" id="navHome" onclick="switchPage('home')">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" id="navHistory" onclick="switchPage('history')">
+        <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.91 8.91 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+        <span>History</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const avatarColors = ['#1a73e8', '#137333', '#b06000', '#9333ea', '#c5221f'];
+
+    let transactions = [
+      {
+        name: 'md Yusuf',
+        upi: 'yusuf@okaxis',
+        amount: '2,000',
+        type: 'received',
+        dateTime: '17 Nov, 2026 • 09:38 PM',
+        color: '#1a73e8',
+        refId: '631916176518'
+      },
+      {
+        name: 'Md Yahiya Hassan',
+        upi: 'yahiya@okaxis',
+        amount: '5,000',
+        type: 'received',
+        dateTime: '17 Nov, 2026 • 09:38 PM',
+        color: '#137333',
+        refId: '631916178942'
+      },
+      {
+        name: 'Mobassrin Naaz',
+        upi: 'mobassrin@ybl',
+        amount: '600',
+        type: 'received',
+        dateTime: '16 Nov, 2026 • 04:35 PM',
+        color: '#b06000',
+        refId: '631916174510'
+      }
+    ];
+
+    function switchPage(page) {
+      const homeView = document.getElementById('homeView');
+      const historyView = document.getElementById('historyView');
+      const headerTitle = document.getElementById('headerTitle');
+      const headerIcons = document.getElementById('headerIcons');
+      const navHome = document.getElementById('navHome');
+      const navHistory = document.getElementById('navHistory');
+
+      if (page === 'home') {
+        homeView.classList.remove('hidden-view');
+        historyView.classList.add('hidden-view');
+        headerTitle.innerText = "Made by Ibrahim";
+        headerIcons.style.display = "flex";
+        navHome.classList.add('active');
+        navHistory.classList.remove('active');
+      } else {
+        homeView.classList.add('hidden-view');
+        historyView.classList.remove('hidden-view');
+        headerTitle.innerText = "Transactions";
+        headerIcons.style.display = "none";
+        navHome.classList.remove('active');
+        navHistory.classList.add('active');
+        renderTransactions();
+      }
+    }
+
+    function formatIndianCurrency(num) {
+      return Number(num).toLocaleString('en-IN');
+    }
+
+    function renderTransactions() {
+      const list = document.getElementById('txList');
+      const miniList = document.getElementById('miniList');
+      const entryCount = document.getElementById('entryCount');
+
+      list.innerHTML = '';
+      miniList.innerHTML = '';
+      entryCount.innerText = transactions.length;
+
+      transactions.forEach((tx, index) => {
+        const firstLetter = tx.name.trim().charAt(0).toUpperCase() || 'M';
+        const isReceived = tx.type === 'received';
+        const displayTitle = isReceived ? `Received from ${tx.name}` : `Paid to ${tx.name}`;
+        const statusText = isReceived ? 'Payment received' : 'Payment completed';
+        const amountDisplay = isReceived ? `+₹${tx.amount}` : `-₹${tx.amount}`;
+        const amountColor = isReceived ? '#137333' : '#202124';
+
+        const item = document.createElement('div');
+        item.className = 'tx-item';
+        item.onclick = () => openReceipt(tx);
+        item.innerHTML = `
+          <div class="tx-left">
+            <div class="avatar" style="background-color: ${tx.color};">${firstLetter}</div>
+            <div class="tx-details">
+              <div class="tx-title">${displayTitle}</div>
+              <div class="tx-time">${tx.dateTime}</div>
+            </div>
+          </div>
+          <div class="tx-right">
+            <div class="tx-amount" style="color: ${amountColor};">${amountDisplay}</div>
+            <div class="tx-status">${statusText}</div>
+          </div>
+        `;
+        list.appendChild(item);
+
+        const mini = document.createElement('div');
+        mini.className = 'mini-item';
+        mini.innerHTML = `
+          <span><strong>${tx.name}</strong> — ₹${tx.amount} (${tx.type})</span>
+          <button class="del-btn" onclick="event.stopPropagation(); deleteEntry(${index})">×</button>
+        `;
+        miniList.appendChild(mini);
+      });
+    }
+
+    function openReceipt(tx) {
+      const isReceived = tx.type === 'received';
+      document.getElementById('modalAvatar').innerText = tx.name.charAt(0).toUpperCase();
+      document.getElementById('modalAvatar').style.backgroundColor = tx.color;
+      document.getElementById('modalName').innerText = tx.name;
+      document.getElementById('modalUpi').innerText = `UPI ID: ${tx.upi}`;
+      document.getElementById('modalAmount').innerText = `₹${tx.amount}`;
+      document.getElementById('modalStatusText').innerText = isReceived ? 'Payment received' : 'Payment completed';
+      document.getElementById('modalRefId').innerText = tx.refId;
+      document.getElementById('modalSenderDetail').innerText = tx.name;
+      document.getElementById('modalTimeDetail').innerText = tx.dateTime;
+
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceipt() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    function addTransaction() {
+      const nameInput = document.getElementById('senderName').value.trim();
+      const upiInput = document.getElementById('upiIdInput').value.trim() || 'user@okaxis';
+      const amountInput = document.getElementById('txAmount').value.trim();
+      const typeInput = document.getElementById('txType').value;
+      const dateTimeInput = document.getElementById('txDateTime').value.trim();
+      const statusMsg = document.getElementById('statusMsg');
+
+      if (!nameInput || !amountInput) {
+        statusMsg.style.color = '#c5221f';
+        statusMsg.innerText = 'Naam aur Amount dono daal bhai!';
+        return;
+      }
+
+      const randomColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+      const formattedAmt = formatIndianCurrency(amountInput);
+
+      transactions.unshift({
+        name: nameInput,
+        upi: upiInput,
+        amount: formattedAmt,
+        type: typeInput,
+        dateTime: dateTimeInput || '17 Nov, 2026 • 10:00 PM',
+        color: randomColor,
+        refId: Math.floor(Math.random() * 900000000000 + 100000000000).toString()
+      });
+
+      document.getElementById('senderName').value = '';
+      document.getElementById('txAmount').value = '';
+      statusMsg.style.color = '#137333';
+      statusMsg.innerText = 'Entry add ho gayi! Ab History tab dekho.';
+      setTimeout(() => { statusMsg.innerText = ''; }, 3000);
+
+      renderTransactions();
+    }
+
+    function deleteEntry(index) {
+      transactions.splice(index, 1);
+      renderTransactions();
+    }
+
+    function clearAll() {
+      transactions = [];
+      renderTransactions();
+    }
+
+    renderTransactions();
+  </script>
+</body>
+</html>
